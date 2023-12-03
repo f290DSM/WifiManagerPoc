@@ -79,6 +79,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(receiver);
+    }
+
+    @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
@@ -87,6 +93,18 @@ public class MainActivity extends AppCompatActivity {
         } else {
             Toast.makeText(this, "Permissao nao garantida", Toast.LENGTH_SHORT).show();
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
+        }
+    }
+
+    private void handleScanResults(List<ScanResult> results) {
+        adapter.clear();
+        for (ScanResult result: results ) {
+            String networkInfo = result.SSID + "  " + result.BSSID + "  " + result.level + " dBm";
+            adapter.add(networkInfo);
+
+            if(result.level > signalThreshold) {
+
+            }
         }
     }
 }
